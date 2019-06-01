@@ -1,0 +1,43 @@
+server:
+  port: 9200
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8061/eureka/
+
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+      - id: authentication
+        uri: lb://authentication
+        predicates:
+        - Path=/auth/**
+        filters:
+        - RewritePath=/auth/(?<path>.*), /$\{path}
+      - id: sign-up
+        uri: lb://sign-up
+        predicates:
+        - Path=/sign-up/**
+        filters:
+        - RewritePath=/sign-up/(?<path>.*), /$\{path}
+      - id: user-profile
+        uri: lb://user-profile
+        predicates:
+        - Path=/profile/**
+        filters:
+        - RewritePath=/profile/(?<path>.*), /$\{path}
+      - id: administration
+        uri: lb://administration
+        predicates:
+        - Path=/admin/**
+        filters:
+        - RewritePath=/admin/(?<path>.*), /$\{path}
+
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n"

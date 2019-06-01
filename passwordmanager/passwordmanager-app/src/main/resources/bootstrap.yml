@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: password-manager
+  cloud:
+    config:
+      uri: http://localhost:8088
